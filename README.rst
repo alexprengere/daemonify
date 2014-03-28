@@ -1,4 +1,4 @@
-daemonify
+Daemonify
 =========
 
 Daemonify a Python script.
