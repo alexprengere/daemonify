@@ -16,7 +16,7 @@ setup(
     ],
     data_files = [
         ('examples', [
-            'examples/DaemonExample.py'
+            'examples/daemon_example.py'
         ])
     ]
 )
