@@ -25,3 +25,11 @@ Just import the Daemon class and subclass it, overriding the *run* method.
     # as the same pidfile is given at init.
     daemon.stop()
 
+
+With the example:
+
+.. code-block:: bash
+
+ $ python examples/daemon_example.py start
+ $ python examples/daemon_example.py stop
+
