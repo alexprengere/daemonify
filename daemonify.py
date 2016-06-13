@@ -5,12 +5,15 @@
 Generic linux daemon base class for python 3.x.
 """
 
-import sys, os, time, atexit, signal
+import sys
+import os
+import time
+import atexit
+import signal
 
 
 class Daemon(object):
-    """
-    A generic daemon class.
+    """A generic daemon class.
 
     Usage: subclass the daemon class and override the run() method.
     """
@@ -18,11 +21,8 @@ class Daemon(object):
 
         self.pidfile = pidfile
 
-
     def daemonize(self):
-        """
-        Deamonize class. UNIX double fork mechanism.
-        """
+        """Deamonize class. UNIX double fork mechanism."""
         try:
             pid = os.fork()
             if pid > 0:
@@ -63,29 +63,24 @@ class Daemon(object):
         atexit.register(self.delpid)
 
         pid = str(os.getpid())
-        with open(self.pidfile,'w+') as f:
+        with open(self.pidfile, 'w+') as f:
             f.write(pid + '\n')
-
 
     def delpid(self):
         os.remove(self.pidfile)
 
-
     def start(self):
-        """
-        Start the daemon.
-        """
+        """Start the daemon."""
         # Check for a pidfile to see if the daemon already runs
         try:
-            with open(self.pidfile,'r') as pf:
+            with open(self.pidfile, 'r') as pf:
 
                 pid = int(pf.read().strip())
         except IOError:
             pid = None
 
         if pid:
-            message = "pidfile {0} already exist. " + \
-                    "Daemon already running?\n"
+            message = "pidfile {0} already exist. Daemon already running?\n"
             sys.stderr.write(message.format(self.pidfile))
             sys.exit(1)
 
@@ -93,23 +88,19 @@ class Daemon(object):
         self.daemonize()
         self.run()
 
-
     def stop(self):
-        """
-        Stop the daemon.
-        """
+        """Stop the daemon."""
         # Get the pid from the pidfile
         try:
-            with open(self.pidfile,'r') as pf:
+            with open(self.pidfile, 'r') as pf:
                 pid = int(pf.read().strip())
         except IOError:
             pid = None
 
         if not pid:
-            message = "pidfile {0} does not exist. " + \
-                    "Daemon not running?\n"
+            message = "pidfile {0} does not exist. Daemon not running?\n"
             sys.stderr.write(message.format(self.pidfile))
-            return # not an error in a restart
+            return  # not an error in a restart
 
         # Try killing the daemon process
         try:
@@ -125,50 +116,38 @@ class Daemon(object):
                 print (str(err.args))
                 sys.exit(1)
 
-
     def restart(self):
-        """
-        Restart the daemon.
-        """
+        """Restart the daemon."""
         self.stop()
         self.start()
 
-
     def debug(self):
-        """
-        Not daemon version.
-        """
+        """Not daemon version."""
         self.run()
 
-
     def status(self):
-        """
-        Display status information on process
-        linked to the pid.
-        """
-
+        """Display status information on process linked to the pid."""
         try:
-            with open(self.pidfile,'r') as pf:
+            with open(self.pidfile, 'r') as pf:
                 pid = int(pf.read().strip())
         except IOError:
             pid = None
 
         if not pid:
-            message = "pidfile {0} does not exist. " + \
-                    "Daemon not running?\n"
+            message = "pidfile {0} does not exist. Daemon not running?\n"
             sys.stdout.write(message.format(self.pidfile))
-            return # not an error in a restart
+            return  # not an error in a restart
 
         try:
             with open("/proc/%d/status" % pid, 'r') as pf:
                 pass
 
         except IOError:
-            sys.stdout.write("There is no running process with PID %d as specified in %s\n" % (pid, self.pidfile))
+            sys.stdout.write("There is no running process with PID %d as specified in %s\n" %
+                             (pid, self.pidfile))
             sys.exit(0)
 
         sys.stdout.write("A process with the PID %d is running\n" % pid)
-
 
     def run(self):
         """
@@ -177,4 +156,4 @@ class Daemon(object):
         It will be called after the process has been daemonized by
         start() or restart().
         """
-
+        pass

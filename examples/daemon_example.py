@@ -15,7 +15,7 @@ if DIRNAME == '':
     DIRNAME = '.'
 
 DIRNAME = os.path.realpath(DIRNAME)
-UPDIR   = os.path.split(DIRNAME)[0]
+UPDIR = os.path.split(DIRNAME)[0]
 
 if UPDIR not in sys.path:
     sys.path.append(UPDIR)
@@ -68,6 +68,4 @@ def main():
 
 
 if __name__ == "__main__":
-
     main()
-
